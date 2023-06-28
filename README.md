@@ -2,7 +2,7 @@
 
 version: 1.0 BETA
 
-#Table of contents
+## Table of contents
 
 - [Description](#description)
 - [Usage](#usage)
