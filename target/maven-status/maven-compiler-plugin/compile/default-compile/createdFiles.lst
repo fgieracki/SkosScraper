@@ -1,0 +1,8 @@
+com\fgieracki\CsvWriter.class
+com\fgieracki\DataWriter.class
+com\fgieracki\data\Person.class
+com\fgieracki\Main.class
+com\fgieracki\CsvReader.class
+com\fgieracki\DataReader.class
+com\fgieracki\WebScraper.class
+com\fgieracki\data\InputPerson.class

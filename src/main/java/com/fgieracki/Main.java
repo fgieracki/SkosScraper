@@ -13,20 +13,31 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        if(args.length != 2){
+            System.out.println("Wrong number of arguments");
+            System.out.println("Usage: java -jar skos-scraper.jar <input_file>.csv <output_file>.csv");
+            return;
+        }
+
+        String inputFileName = args[0];
+        String outputFileName = args[1];
+        run(inputFileName, outputFileName);
+    }
+
+    private static void run(String inputFileName, String outputFileName){
         DataReader dataReader = new CsvReader();
         List<InputPerson> inputPersons = new ArrayList<>();
-        dataReader.readData("test.csv", inputPersons);
+        dataReader.readData(inputFileName, inputPersons);
 
         List<String> urlList = new ArrayList<>();
         generateUrls(inputPersons, urlList);
 
         WebScraper webScraper = new WebScraper(urlList);
         List<Person> results = webScraper.scrapePages();
-
-        System.out.println(results);
-
         DataWriter dataWriter = new CsvWriter();
-        dataWriter.writeData("results.csv", results);
+        dataWriter.writeData(outputFileName, results);
+
+        System.out.println("Done");
     }
 
     private static void generateUrls(List<InputPerson> input, List<String> output) {
@@ -35,4 +46,5 @@ public class Main {
             output.add(url);
         }
     }
+
 }

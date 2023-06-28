@@ -1,6 +1,4 @@
 
-7
-pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 [
 +src/main/java/com/fgieracki/DataWriter.java,b\4\b47abadbf32ea4c6d539f4a4092bffb90b1fbf6e
 Z
