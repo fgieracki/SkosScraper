@@ -6,13 +6,16 @@ import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.CsvToBean;
 
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CsvReader implements DataReader{
 
     @Override
-    public void readData(String fileName, List<InputPerson> data) {
+    public List<InputPerson> readData(String fileName) {
         System.out.println("Reading data from CSV file...");
+
+        List<InputPerson> data = new ArrayList<>();
 
         try(CSVReader csvReader = new CSVReader(new FileReader(fileName))){
             ColumnPositionMappingStrategy<InputPerson> strategy = new ColumnPositionMappingStrategy<>();
@@ -33,6 +36,6 @@ public class CsvReader implements DataReader{
             e.printStackTrace();
         }
 
-        return;
+        return data;
     }
 }

@@ -1,6 +1,5 @@
 package com.fgieracki;
 
-import com.fgieracki.data.InputPerson;
 import com.fgieracki.data.Person;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,21 +37,20 @@ public class WebScraper {
             }
 
             if(doc.location().contains("search")) {
-                System.out.println("Scraping person page: " + page);
-                List<String> newUrlsList = scrapePeopleListPage(doc);
-                for(String url : newUrlsList) {
-                    if(!pagesDiscovered.contains(url) && !pagesToDiscover.contains(url)) {
-                        pagesToDiscover.add(url);
-                    }
-                }
-            } else {
+                scrapePeopleListPage(doc);
+            } else if(doc.location().contains("osoba")) {
                 people.add(scrapePersonPage(doc));
+            } else if(doc.location().contains("jednostka")) {
+                scrapeDepartmentPage(doc);
+            } else if(doc.location().contains("jednostki")) {
+                scrapeDepartmentList(doc);
+            }  else {
+                throw new RuntimeException("Unknown page type: " + doc.location());
             }
 
         }
         return people;
     }
-
 
     private List<String> scrapePeopleListPage(Document document) {
         List<String> result = new ArrayList<>();
@@ -66,6 +64,12 @@ public class WebScraper {
                     .select("a")
                     .attr("href");
             result.add(url);
+        }
+
+        for(String url : result) {
+            if(!pagesDiscovered.contains(url) && !pagesToDiscover.contains(url)) {
+                pagesToDiscover.add(url);
+            }
         }
 
         return result;
@@ -110,6 +114,32 @@ public class WebScraper {
                     break;
                 default:
                     System.out.println("Unknown key: " + key);
+            }
+        }
+    }
+
+    private void scrapeDepartmentList(Document doc) {
+
+        Elements departmentUrls = doc.select("div#aghtreen ul > li > a");
+
+        for(Element departmentUrl : departmentUrls) {
+            String url = departmentUrl.attr("href");
+            if(!pagesDiscovered.contains(url) && !pagesToDiscover.contains(url)) {
+                pagesToDiscover.add(url);
+            }
+        }
+    }
+
+    private void scrapeDepartmentPage(Document doc) {
+        Elements tableRows = doc.select("table.info-osoba > tbody > tr");
+
+        for(Element row : tableRows) {
+            Elements cells = row.select("td");
+            for(Element cell : cells) {
+                String url = cell.select("a").attr("href");
+                if(!url.isBlank() && !pagesDiscovered.contains(url) && !pagesToDiscover.contains(url)) {
+                    pagesToDiscover.add(url);
+                }
             }
         }
     }
